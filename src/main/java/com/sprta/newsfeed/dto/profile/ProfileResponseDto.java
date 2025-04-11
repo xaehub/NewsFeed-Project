@@ -1,7 +1,5 @@
-package com.sprta.newsfeed.dto;
+package com.sprta.newsfeed.dto.profile;
 
-import com.sprta.newsfeed.entity.Profile;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

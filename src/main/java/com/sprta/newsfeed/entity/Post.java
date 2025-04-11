@@ -30,7 +30,7 @@ public class Post extends BaseEntity {
     @Column(nullable = false)
     private Integer countComments = 0;
 
-    @Column(nullable = false)
+    @Column(name = "likes_count", nullable = false)
     private Integer likesCount = 0;
 
     // 게시글 1개에 좋아요가 여러개 달리 수 있도록
@@ -57,7 +57,6 @@ public class Post extends BaseEntity {
         this.likesCount = 0;
     }
 
-
     // 댓글 수 증가
     public void increaseCommentCount() {
         this.countComments += 1;
@@ -68,6 +67,5 @@ public class Post extends BaseEntity {
         this.countComments = Math.max(0, this.countComments - 1);
     }
 
-
-
 }
+

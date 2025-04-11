@@ -1,6 +1,8 @@
 package com.sprta.newsfeed.security.filter;
 
 import com.sprta.newsfeed.common.Const;
+import com.sprta.newsfeed.security.customerror.CustomException;
+import com.sprta.newsfeed.security.customerror.ErrorCode;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -41,8 +43,8 @@ public class LoginFilter implements Filter {
             log.info("loginSession: {}", loginSession);
             // 로그인 상태가 아니라면 에러 던지기
             if(loginSession == null || loginSession.getAttribute(Const.LOGIN_USER) == null) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인 하셈");
-                return;
+                throw new CustomException(ErrorCode.INVALID_INPUT);
+
             }
         }
 

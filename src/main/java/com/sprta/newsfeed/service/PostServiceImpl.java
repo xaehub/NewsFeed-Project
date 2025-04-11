@@ -8,6 +8,7 @@ import com.sprta.newsfeed.entity.Comment;
 import com.sprta.newsfeed.entity.Post;
 import com.sprta.newsfeed.entity.User;
 import com.sprta.newsfeed.repository.CommentRepository;
+import com.sprta.newsfeed.repository.PostLikesRepository;
 import com.sprta.newsfeed.repository.PostRepository;
 import com.sprta.newsfeed.repository.UserRepository;
 import com.sprta.newsfeed.security.customerror.CustomException;
@@ -18,7 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 
@@ -31,6 +31,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final PostLikesRepository postLikesRepository;
 
     @Override
     //게시글 작성 로직
@@ -41,13 +42,14 @@ public class PostServiceImpl implements PostService {
         Post post = new Post(requestDto.getTitle(), requestDto.getContent(), user);
         Post saved = postRepository.save(post);
 
+        Integer likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
         return new PostResponseDto(
                 saved.getId(),
                 saved.getUser().getUserName(),
                 saved.getTitle(),
                 saved.getContent(),
                 saved.getCountComments(),
-                saved.getLikesCount()
+                likeCount
         );
     }
 
@@ -59,13 +61,14 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
         post.updateContent(requestDto.getContent());
 
+        Integer likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
         return new PostResponseDto(
                 post.getId(),
                 post.getUser().getUserName(),
                 post.getTitle(),
                 post.getContent(),
                 post.getCountComments(),
-                post.getLikesCount()
+                likeCount
         );
     }
 
@@ -75,26 +78,29 @@ public class PostServiceImpl implements PostService {
         Pageable pageable = PageRequest.of(page, 10);
         Page<Post> posts = postRepository.findAll(pageable);
 
-        return posts.stream().map(post -> new PostResponseDto(
-                post.getId(),
-                post.getUser().getUserName(),
-                post.getTitle(),
-                post.getContent(),
-                post.getCountComments(),
-                post.getLikesCount()
-        )).toList();
-
+        return posts.stream().map(post -> {
+            Integer likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
+            return new PostResponseDto(
+                    post.getId(),
+                    post.getUser().getUserName(),
+                    post.getTitle(),
+                    post.getContent(),
+                    post.getCountComments(),
+                    likeCount
+            );
+        }).toList();
     }
 
     @Override
     // 게시글 + 댓글 조회
     public PostResponseDto getPostWithComments(Long id) {
-      Post post = postRepository.findById(id)
-              .orElseThrow(()-> new CustomException(ErrorCode.POST_NOT_FOUND));
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-      List<Comment> comments = commentRepository.findAllByPostId(id);
+        List<Comment> comments = commentRepository.findAllByPostId(id);
+        Integer likeCount = Math.toIntExact(postLikesRepository.countByPost(post));
 
-      return new PostResponseDto(post, comments);
+        return new PostResponseDto(post, comments, likeCount);
     }
 
 

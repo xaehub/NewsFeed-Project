@@ -1,4 +1,4 @@
-package com.sprta.newsfeed.dto;
+package com.sprta.newsfeed.dto.profile;
 
 
 import jakarta.validation.constraints.NotBlank;
