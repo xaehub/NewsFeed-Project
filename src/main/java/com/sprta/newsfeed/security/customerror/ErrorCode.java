@@ -15,6 +15,8 @@ public enum ErrorCode {
     POST_UPDATE_FAILED(400, "PST002", "게시물 수정에 실패했습니다."),
     POST_DELETE_FAILED(400, "PST003", "게시물 삭제에 실패했습니다."),
     POST_CREATION_FAILED(400, "PST004", "게시물 생성에 실패하셨습니다."),
+    FORBIDDEN_DELETE(403, "PST005","게시글 삭제 권한이 없습니다."),
+    FORBIDDEN_UPDATE(403, "PST006","게시글 수정 권한이 없습니다."),
 
     // 댓글
     COMMENT_NOT_FOUND(404, "CMT001", "해당 댓글을 찾을 수 없습니다."),
@@ -35,7 +37,8 @@ public enum ErrorCode {
     PROFILE_CREATION_FAILED(400, "PRI002", "프로필 작성에 실패했습니다."),
     PROFILE_UPDATE_FAILED(400, "PRI003", "프로필 수정에 실패했습니다."),
     PROFILE_ALREADY_EXISTS(400, "PRI004", "이미 프로필이 존재합니다."),
-
+    INVALID_PASSWORD_FORMAT(400, "PWD001", "비밀번호는 영문 대소문자, 숫자, 특수문자를 포함해 8자 이상이어야 합니다."),
+    SAME_AS_OLD_PASSWORD(400, "PWD002", "현재 비밀번호와 동일한 비밀번호로는 변경할 수 없습니다."),
     // 좋아요
     COMMENT_LIKE_NOT_FOUND(404, "C-LIK001", "해당 댓글에 좋아요 기록이 없습니다."),
     ALREADY_LIKE_COMMENT(409, "C-LIK002", "이미 해당 댓글에 좋아요를 했습니다."),

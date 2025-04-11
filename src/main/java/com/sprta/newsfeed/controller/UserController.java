@@ -24,7 +24,6 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<SignupResponseDto> signup(@RequestBody @Valid SignupRequestDto requestDto) {
-        // 회원가입 비즈니스 로직 실행 (중복 확인, 비밀번호 암호화 등)
         SignupResponseDto signupResponseDto =
                 userService.signUp(
                         requestDto.getUserName(),
@@ -52,6 +51,7 @@ public class UserController {
 
         // 새로운 세션 생성 및 로그인 유저 정보 저장
         HttpSession session = request.getSession(true);
+        // 로그인 성공 시 사용자 정보를 세션에 저장
         session.setAttribute(Const.LOGIN_USER, login);
 
         return ResponseEntity.ok("로그인 되었습니다");

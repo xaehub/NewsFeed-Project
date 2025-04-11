@@ -1,6 +1,5 @@
 package com.sprta.newsfeed.controller;
 
-import com.sprta.newsfeed.dto.postlike.PostLikesResponseDto;
 import com.sprta.newsfeed.repository.PostLikesRepository;
 import com.sprta.newsfeed.service.PostLikesService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,12 +23,12 @@ public class PostLikesController {
      * @return 성공 시 "게시글 좋아요 완료" 메시지 반환
      */
     @PostMapping("{postId}")
-    public ResponseEntity<PostLikesResponseDto> likePost(
+    public ResponseEntity<String> likePost(
             @PathVariable Long postId,
             HttpServletRequest request
     ) {
         postLikesService.likePost(request, postId);
-        return ResponseEntity.ok(new PostLikesResponseDto("게시글 좋아요 완료"));
+        return ResponseEntity.ok("게시글 좋아요 완료");
     }
 
     /**
@@ -40,11 +39,11 @@ public class PostLikesController {
      * @return 성공 시 "게시글 좋아요 취소 완료" 메시지를 반환
      */
     @DeleteMapping("/{postId}")
-    public ResponseEntity<PostLikesResponseDto> unlikePost(
+    public ResponseEntity<String> unlikePost(
             @PathVariable Long postId,
             HttpServletRequest request
     ) {
         postLikesService.unlikePost(request, postId);
-        return ResponseEntity.ok(new PostLikesResponseDto("게시글 좋아요 취소 완료"));
+        return ResponseEntity.ok("게시글 좋아요 취소 완료");
     }
 }

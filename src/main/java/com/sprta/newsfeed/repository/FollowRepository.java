@@ -5,6 +5,7 @@ import com.sprta.newsfeed.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -18,4 +19,5 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
     Integer countByFollowing(User user); // 내가 팔로우 하는 사람
 
     Integer countByFollower(User user); // 나를 팔로우 하는 사람
+
 }

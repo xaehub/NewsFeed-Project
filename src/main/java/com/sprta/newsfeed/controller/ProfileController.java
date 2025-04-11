@@ -1,5 +1,6 @@
 package com.sprta.newsfeed.controller;
 
+import com.sprta.newsfeed.dto.profile.PasswordUpdateRequestDto;
 import com.sprta.newsfeed.dto.profile.ProfileResponseDto;
 import com.sprta.newsfeed.dto.profile.ProfileResponseWrapperDto;
 import com.sprta.newsfeed.dto.profile.ProfileUpdateRequestDto;
@@ -25,12 +26,12 @@ public class ProfileController {
      * @return 작성 완료 메시지
      */
     @PostMapping
-    public ResponseEntity<ProfileResponseWrapperDto> createProfile(
+    public ResponseEntity<String> createProfile(
             HttpServletRequest request,
             @RequestBody @Valid ProfileUpdateRequestDto requestDto
     ) {
         profileService.createProfile(request, requestDto);
-        return ResponseEntity.ok(ProfileResponseWrapperDto.success("프로필이 성공적으로 작성되었습니다.", null));
+        return ResponseEntity.ok("프로필이 성공적으로 작성되었습니다.");
     }
 
     /**
@@ -40,9 +41,9 @@ public class ProfileController {
      * @return 프로필 정보를 담은 응답 DTO (성공 여부, 메시지, 프로필 데이터 )
      */
     @GetMapping
-    public ResponseEntity<ProfileResponseWrapperDto> getProfile(HttpServletRequest request) {
+    public ResponseEntity<ProfileResponseDto> getProfile(HttpServletRequest request) {
         ProfileResponseDto dto = profileService.getProfile(request);
-        return ResponseEntity.ok(ProfileResponseWrapperDto.success("프로필 조회 성공", dto));
+        return ResponseEntity.ok(dto);
     }
 
     /**
@@ -53,12 +54,22 @@ public class ProfileController {
      * @return 수정된 프로필 정보를 포함한 응답 DTO
      */
     @PutMapping
-    public ResponseEntity<ProfileResponseWrapperDto> updateProfile(
+    public ResponseEntity<String> updateProfile(
             HttpServletRequest request,
             @RequestBody @Valid ProfileUpdateRequestDto requestDto
     ) {
-        ProfileResponseDto updatedDto = profileService.updateProfile(request, requestDto);
-        return ResponseEntity.ok(ProfileResponseWrapperDto.success("프로필이 수정되었습니다.", updatedDto));
+        profileService.updateProfile(request, requestDto);
+        return ResponseEntity.ok("프로필이 수정되었습니다.");
     }
+
+    @PutMapping("/password")
+    public ResponseEntity<String> updatePassword(
+            HttpServletRequest request,
+            @RequestBody PasswordUpdateRequestDto requestDto
+    ) {
+        profileService.updatePassword(request, requestDto);
+        return ResponseEntity.ok("비밀번호 변경 완료");
+    }
+
 }
 

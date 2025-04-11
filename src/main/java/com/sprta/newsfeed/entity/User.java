@@ -59,5 +59,9 @@ public class User {
     public boolean isDeleted() {
         return isDeleted;
     }
-    
+
+    // 비밀번호 변경
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
 }

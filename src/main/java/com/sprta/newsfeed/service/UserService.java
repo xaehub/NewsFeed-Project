@@ -5,8 +5,6 @@ import com.sprta.newsfeed.dto.Signup.SignupResponseDto;
 import com.sprta.newsfeed.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 
-import java.util.Optional;
-
 public interface UserService {
 
     //회원가입 기능
@@ -21,6 +19,7 @@ public interface UserService {
     //회원 탈퇴 기능
     void signout(Long userId, String inputPassword);
 
+    //사용자 조회
     User findById(Long userId);
 }
 

@@ -2,6 +2,7 @@ package com.sprta.newsfeed.service;
 
 import com.sprta.newsfeed.common.Const;
 import com.sprta.newsfeed.dto.Login.LoginResponseDto;
+import com.sprta.newsfeed.dto.profile.PasswordUpdateRequestDto;
 import com.sprta.newsfeed.dto.profile.ProfileResponseDto;
 import com.sprta.newsfeed.entity.Profile;
 import com.sprta.newsfeed.dto.profile.ProfileUpdateRequestDto;
@@ -90,6 +91,32 @@ public class ProfileService {
 
         // 업데이트된 프로필 정보를 리턴
         return new ProfileResponseDto(user.getUserName(), user.getEmail(), profile.getIntroduction());
+    }
+
+    // 비밀번호 변경
+    public void updatePassword(HttpServletRequest request, PasswordUpdateRequestDto requestDto) {
+        User user = getLoginUser(request); // 로그인한 사용자 가져오기
+
+        // 현재 비밀번호 확인
+        if (!passwordEncoder.matches(requestDto.getCurrentPassword(), user.getPassword())) {
+            throw new CustomException(ErrorCode.MISMATCH_PASSWORD); // 현재 비밀번호 불일치
+        }
+
+        // 새 비밀번호 형식 확인
+        String newPassword = requestDto.getNewPassword();
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-={}\\[\\]|:;\"'<>,.?/~`]).{8,}$";
+        if (!newPassword.matches(passwordRegex)) {
+            throw new CustomException(ErrorCode.INVALID_PASSWORD_FORMAT); // 비밀번호 형식 오류
+        }
+
+        // 현재 비밀번호와 새 비밀번호가 같은지 확인
+        if (passwordEncoder.matches(newPassword, user.getPassword())) {
+            throw new CustomException(ErrorCode.SAME_AS_OLD_PASSWORD); // 같은 비밀번호로 변경할 때 나오는 오류
+        }
+
+        // 새 비밀번호 암호화 후 저장
+        user.updatePassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 
 }
